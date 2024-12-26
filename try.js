@@ -108,19 +108,37 @@
 // !----------------------------------------------
 
 
-const Hello = ({name,age}) => {
+// const Hello = ({name,age}) => {
 
-    const bornYear = () => {
-        return yearNow = new Date().getFullYear()- age
-    }
+//     const bornYear = () => {
+//         return yearNow = new Date().getFullYear()- age
+//     }
   
-    return (
-      <div>
-        <p>
-          Hello {name}, you are {age} years old
-        </p>
+//     return (
+//       <div>
+//         <p>
+//           Hello {name}, you are {age} years old
+//         </p>
   
-        <p>So you were probably born in {bornYear()}</p>
-      </div>
-    )
-  }
+//         <p>So you were probably born in {bornYear()}</p>
+//       </div>
+//     )
+//   }
+
+
+//   const recipe = {
+//     name:"",
+//     type:"",
+//     category:""
+//   }
+
+//   let name = {
+//     ...recipe, name:"Vortex"
+//   }
+
+
+// console.log(recipe)
+
+// console.log(name)
+
+// console.log(recipe)
