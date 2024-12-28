@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable react/prop-types */
+// /* eslint-disable react/jsx-key */
+// /* eslint-disable react/prop-types */
 import "./App.css";
 
 import Note from "./components/Note";
