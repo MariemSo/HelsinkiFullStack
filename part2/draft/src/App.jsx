@@ -1,14 +1,20 @@
 // /* eslint-disable react/jsx-key */
 // /* eslint-disable react/prop-types */
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Note from "./components/Note";
-
-function App(props) {
+import axios from "axios";
+function App() {
   // eslint-disable-next-line react/prop-types
-  const [notes, setNotes] = useState(props.notes);
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note ...");
   const [showAll, setShowAll] = useState(true);
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/notes").then((response) => {
+      setNotes(response.data);
+    });
+  }, []);
 
   const addNotes = (e) => {
     e.preventDefault();
