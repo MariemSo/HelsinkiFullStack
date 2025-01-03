@@ -2,7 +2,13 @@ import personService from "../services/person";
 
 /* eslint-disable react/prop-types */
 
-const Persons = ({ setPersons, showAll, persons, filterPerson }) => {
+const Persons = ({
+  setMessage,
+  setPersons,
+  showAll,
+  persons,
+  filterPerson,
+}) => {
   const deletedPerson = (id, name) => {
     if (confirm(`delete ${name} ?`) === true) {
       personService
@@ -11,9 +17,20 @@ const Persons = ({ setPersons, showAll, persons, filterPerson }) => {
           setPersons((prevPersons) =>
             prevPersons.filter((person) => person.id !== id)
           );
+          const successMessage = {
+            text: `${name}  Has been deleted !`,
+            isError: false,
+          };
+          setMessage(successMessage);
         })
         .catch((err) => {
           console.log(err);
+          const failMessage = {
+            text: `Information ${name} Has already been removed from server !`,
+            isError: true,
+          };
+          setMessage(failMessage);
+          // setPersons(persons.filter((p) => p.id !== id));
         });
     } else {
       console.log("deletion Canceled");

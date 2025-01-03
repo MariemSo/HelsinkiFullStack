@@ -1,9 +1,10 @@
+import "./App.css";
 import { useEffect, useState } from "react";
 import Persons from "./components/Persons";
 import PersonsForm from "./components/PersonsForm";
 import Filter from "./components/Filter";
-import "./App.css";
 import personService from "./services/person";
+import Notification from "./components/Notification";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -11,6 +12,7 @@ function App() {
   const [newNumber, setNewNumber] = useState("");
   const [filterPerson, setFilterPerson] = useState([]);
   const [showAll, setShowAll] = useState(true);
+  const [message, setMessage] = useState({ text: "", isError: false });
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -43,11 +45,21 @@ function App() {
       ) {
         console.log(isPerson[0].number);
         updatePerson(isPerson[0].id, newNumber);
+        const successMessage = {
+          text: `The number of ${isPerson[0].name} Has been updated!`,
+          isError: false,
+        };
+        setMessage(successMessage);
       }
       return;
     }
     personService.create(newPerson).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      const successMessage = {
+        text: `${newPerson.name}  Has been added !`,
+        isError: false,
+      };
+      setMessage(successMessage);
       setNewName("");
       setNewNumber("");
     });
@@ -77,6 +89,8 @@ function App() {
     <>
       <h2>Phonebook</h2>
 
+      <Notification text={message.text} isError={message.isError} />
+
       <Filter filteredPerson={filteredPerson} />
 
       <h3>Add a new</h3>
@@ -92,6 +106,8 @@ function App() {
       <h3>Numbers</h3>
 
       <Persons
+        message={message}
+        setMessage={setMessage}
         setPersons={setPersons}
         showAll={showAll}
         persons={persons}

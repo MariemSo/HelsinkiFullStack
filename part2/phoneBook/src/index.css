@@ -35,6 +35,16 @@ h1 {
   line-height: 1.1;
 }
 
+.message{
+  color: greenyellow;
+  font-style: italic;
+  font-size: large;
+}
+.error{
+  color: rgb(215, 22, 22);
+  font-style: italic;
+  font-size: large;
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;
