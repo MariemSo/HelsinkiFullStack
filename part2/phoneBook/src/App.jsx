@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Persons from "./components/Persons";
 import PersonsForm from "./components/PersonsForm";
 import Filter from "./components/Filter";
-import axios from "axios";
 import "./App.css";
+import personService from "./services/person";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -13,9 +13,8 @@ function App() {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log(response.data);
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -29,17 +28,38 @@ function App() {
 
   const addPerson = (e) => {
     e.preventDefault();
+    let newId = persons.length + 1;
     const newPerson = {
-      id: persons.length + 1,
+      id: newId.toString(),
       name: newName,
       number: newNumber,
     };
     const isPerson = persons.filter((person) => person.name === newPerson.name);
     if (isPerson.length > 0) {
-      return alert(`${newPerson.name} is already added to phonebook`);
+      if (
+        confirm(
+          `${newPerson.name} is already added to phonebook,replace the old number with a new none ?`
+        ) === true
+      ) {
+        console.log(isPerson[0].number);
+        updatePerson(isPerson[0].id, newNumber);
+      }
+      return;
     }
+    personService.create(newPerson).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
+      setNewName("");
+      setNewNumber("");
+    });
+  };
 
-    setPersons(persons.concat(newPerson));
+  const updatePerson = (id, newNumber) => {
+    const person = persons.find((p) => p.id === id);
+    const updatedNumber = { ...person, number: newNumber };
+
+    personService.updatePerson(id, updatedNumber).then((returnedPerson) => {
+      setPersons(persons.map((p) => (p.id === id ? returnedPerson : p)));
+    });
   };
 
   const filteredPerson = (e) => {
@@ -62,6 +82,8 @@ function App() {
       <h3>Add a new</h3>
 
       <PersonsForm
+        newName={newName}
+        newNumber={newNumber}
         addPerson={addPerson}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
@@ -70,6 +92,7 @@ function App() {
       <h3>Numbers</h3>
 
       <Persons
+        setPersons={setPersons}
         showAll={showAll}
         persons={persons}
         filterPerson={filterPerson}
